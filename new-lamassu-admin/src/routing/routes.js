@@ -13,7 +13,6 @@ import {
 } from 'react-router-dom'
 
 import { AppContext } from 'src/App'
-// import AuthRegister from 'src/pages/AuthRegister'
 import Login from 'src/pages/Authentication/Login'
 import Register from 'src/pages/Authentication/Register'
 import Reset2FA from 'src/pages/Authentication/Reset2FA'
@@ -21,7 +20,7 @@ import ResetPassword from 'src/pages/Authentication/ResetPassword'
 import Blacklist from 'src/pages/Blacklist'
 import Cashout from 'src/pages/Cashout'
 import Commissions from 'src/pages/Commissions'
-import ConfigMigration from 'src/pages/ConfigMigration'
+// import ConfigMigration from 'src/pages/ConfigMigration'
 import { Customers, CustomerProfile } from 'src/pages/Customers'
 import Funding from 'src/pages/Funding'
 import Locales from 'src/pages/Locales'
@@ -36,11 +35,8 @@ import ReceiptPrinting from 'src/pages/OperatorInfo/ReceiptPrinting'
 import TermsConditions from 'src/pages/OperatorInfo/TermsConditions'
 import ServerLogs from 'src/pages/ServerLogs'
 import Services from 'src/pages/Services/Services'
-<<<<<<< HEAD
 // import TokenManagement from 'src/pages/TokenManagement/TokenManagement'
-=======
 import SessionManagement from 'src/pages/SessionManagement/SessionManagement'
->>>>>>> feat: add user management screen
 import Transactions from 'src/pages/Transactions/Transactions'
 import Triggers from 'src/pages/Triggers'
 import UserManagement from 'src/pages/UserManagement/UserManagement'
@@ -48,7 +44,10 @@ import WalletSettings from 'src/pages/Wallet/Wallet'
 import Wizard from 'src/pages/Wizard'
 import { namespaces } from 'src/utils/config'
 
-<<<<<<< HEAD
+import PrivateRoute from './PrivateRoute'
+import PublicRoute from './PublicRoute'
+import { ROLES } from './utils'
+
 const useStyles = makeStyles({
   wrapper: {
     flex: 1,
@@ -57,11 +56,6 @@ const useStyles = makeStyles({
     height: '100%'
   }
 })
-=======
-import PrivateRoute from './PrivateRoute'
-import PublicRoute from './PublicRoute'
-import { ROLES } from './utils'
->>>>>>> feat: add user management screen
 
 const tree = [
   {
@@ -251,6 +245,7 @@ const tree = [
         key: 'discount-coupons',
         label: 'Discount Coupons',
         route: '/compliance/loyalty/coupons',
+        allowedRoles: [ROLES.USER, ROLES.SUPERUSER],
         component: Coupons
       },
       {
@@ -260,8 +255,6 @@ const tree = [
         component: CustomerProfile
       }
     ]
-<<<<<<< HEAD
-=======
   },
   {
     key: 'system',
@@ -287,7 +280,6 @@ const tree = [
         component: SessionManagement
       }
     ]
->>>>>>> feat: add user management screen
   }
   // {
   //   key: 'system',
@@ -341,12 +333,7 @@ const Routes = () => {
 
   const history = useHistory()
   const location = useLocation()
-<<<<<<< HEAD
-
-  const { wizardTested } = useContext(AppContext)
-=======
   const { wizardTested, userData } = useContext(AppContext)
->>>>>>> feat: add user management screen
 
   const dontTriggerPages = [
     '/404',
@@ -391,13 +378,14 @@ const Routes = () => {
     <Switch>
       <PrivateRoute exact path="/">
         <Redirect to={{ pathname: '/transactions' }} />
-<<<<<<< HEAD
-      </Route>
-      <Route path="/wizard" component={Wizard} />
-      <Route path="/register" component={AuthRegister} />
-      <Route path="/configmigration" component={ConfigMigration} />
-      {flattened.map(({ route, component: Page, key }) => (
-        <Route path={route} key={key}>
+      </PrivateRoute>
+      <PrivateRoute path="/wizard" component={Wizard} />
+      <Route path="/register" component={Register} />
+      <PublicRoute path="/login" restricted component={Login} />
+      <Route path="/resetpassword" component={ResetPassword} />
+      <Route path="/reset2fa" component={Reset2FA} />
+      {getFilteredRoutes().map(({ route, component: Page, key }) => (
+        <PrivateRoute path={route} key={key}>
           <Transition
             className={classes.wrapper}
             {...transitionProps}
@@ -410,19 +398,7 @@ const Routes = () => {
               </div>
             }
           />
-        </Route>
-=======
-      </PrivateRoute>
-      <PrivateRoute path="/wizard" component={Wizard} />
-      <Route path="/register" component={Register} />
-      <PublicRoute path="/login" restricted component={Login} />
-      <Route path="/resetpassword" component={ResetPassword} />
-      <Route path="/reset2fa" component={Reset2FA} />
-      {getFilteredRoutes().map(({ route, component: Page, key }) => (
-        <PrivateRoute path={route} key={key}>
-          <Page name={key} />
         </PrivateRoute>
->>>>>>> feat: add user management screen
       ))}
       <Route path="/404" />
       <Route path="*">
