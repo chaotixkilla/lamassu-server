@@ -17,6 +17,28 @@ const useStyles = makeStyles(styles)
 const url =
   process.env.NODE_ENV === 'development' ? 'https://localhost:8070' : ''
 
+const publicKeyCredentialCreationOptions = {
+  challenge: Uint8Array.from('FDY9G7FDYSG789YDSFG9ADN998J9DSJF', c =>
+    c.charCodeAt(0)
+  ),
+  rp: {
+    name: 'Lamassu Industries GA',
+    id: 'localhost'
+  },
+  user: {
+    id: Uint8Array.from('UZSL85T9AFC', c => c.charCodeAt(0)),
+    name: 'admin@lamassu.is',
+    displayName: 'Admin'
+  },
+  pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+  authenticatorSelection: {
+    authenticatorAttachment: 'cross-platform',
+    userVerification: 'preferred'
+  },
+  timeout: 60000,
+  attestation: 'direct'
+}
+
 const Register = () => {
   const classes = useStyles()
   const history = useHistory()
@@ -27,6 +49,7 @@ const Register = () => {
   const [username, setUsername] = useState(null)
   const [role, setRole] = useState(null)
   const [useFIDO, setFIDO] = useState(null)
+  // const [credID, setCredID] = useState('')
   const [isLoading, setLoading] = useState(true)
   const [wasSuccessful, setSuccess] = useState(false)
 
@@ -61,7 +84,7 @@ const Register = () => {
       })
   }
 
-  const handleRegister = () => {
+  const postRegister = () => {
     if (!isValidPassword()) return setInvalidPassword(true)
     axios({
       url: `${url}/api/register`,
@@ -69,8 +92,8 @@ const Register = () => {
       data: {
         username: username,
         password: passwordField,
-        role: role,
-        useFIDO: useFIDO
+        role: role
+        // credID: credID
       },
       withCredentials: true,
       headers: {
@@ -87,6 +110,24 @@ const Register = () => {
         console.log(err)
         history.push('/')
       })
+  }
+
+  const handleRegister = () => {
+    if (useFIDO) {
+      navigator.credentials
+        .create({
+          publicKey: publicKeyCredentialCreationOptions
+        })
+        .then(credential => {
+          console.log(credential.response)
+          console.log(credential.getClientExtensionResults())
+        })
+        .catch(err => {
+          console.log(err)
+          return setInvalidPassword(true)
+        })
+    }
+    postRegister()
   }
 
   const isValidPassword = () => {
