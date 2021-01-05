@@ -75,6 +75,19 @@ const styles = {
   codeContainer: {
     marginTop: 15,
     marginBottom: 15
+  },
+  fidoWrapper: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  checkbox: {
+    transform: 'scale(2)',
+    marginRight: 5,
+    marginLeft: -5
+  },
+  checkboxLabel: {
+    fontSize: '14px',
+    fontWeight: 'normal'
   }
 }
 

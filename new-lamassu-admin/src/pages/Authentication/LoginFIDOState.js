@@ -13,11 +13,9 @@ const url =
 
 const useStyles = makeStyles(styles)
 
-const LoginState = ({
+const LoginFIDOState = ({
   clientField,
   onClientChange,
-  passwordField,
-  onPasswordChange,
   rememberMeField,
   onRememberMeChange,
   STATES,
@@ -32,11 +30,6 @@ const LoginState = ({
     setInvalidLogin(false)
   }
 
-  const handlePasswordChange = event => {
-    onPasswordChange(event.target.value)
-    setInvalidLogin(false)
-  }
-
   const handleRememberMeChange = () => {
     onRememberMeChange(!rememberMeField)
   }
@@ -47,7 +40,6 @@ const LoginState = ({
       url: `${url}/api/login`,
       data: {
         username: clientField,
-        password: passwordField,
         rememberMe: rememberMeField
       },
       options: {
@@ -88,17 +80,6 @@ const LoginState = ({
         onChange={handleClientChange}
         value={clientField}
       />
-      <Label2 className={classes.inputLabel}>Password</Label2>
-      <TextInput
-        className={classes.input}
-        error={invalidLogin}
-        name="password"
-        id="password"
-        type="password"
-        size="lg"
-        onChange={handlePasswordChange}
-        value={passwordField}
-      />
       <div className={classes.rememberMeWrapper}>
         <Checkbox
           className={classes.checkbox}
@@ -116,10 +97,10 @@ const LoginState = ({
         )}
         <Button
           onClick={() => {
-            handleLoginState(STATES.LOGINFIDO)
+            handleLoginState(STATES.LOGIN)
           }}
           buttonClassName={classes.loginButton}>
-          FIDO
+          Regular Login
         </Button>
         <Button
           onClick={() => {
@@ -133,4 +114,4 @@ const LoginState = ({
   )
 }
 
-export default LoginState
+export default LoginFIDOState

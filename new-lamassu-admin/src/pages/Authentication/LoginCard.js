@@ -7,6 +7,7 @@ import { ReactComponent as Logo } from 'src/styling/icons/menu/logo.svg'
 
 import Input2FAState from './Input2FAState'
 import styles from './Login.styles'
+import LoginFIDOState from './LoginFIDOState'
 import LoginState from './LoginState'
 import Setup2FAState from './Setup2FAState'
 
@@ -15,7 +16,8 @@ const useStyles = makeStyles(styles)
 const STATES = {
   LOGIN: 'Login',
   SETUP_2FA: 'Setup 2FA',
-  INPUT_2FA: 'Input 2FA'
+  INPUT_2FA: 'Input 2FA',
+  LOGINFIDO: 'Login using FIDO'
 }
 
 const LoginCard = () => {
@@ -77,6 +79,17 @@ const LoginCard = () => {
           <Setup2FAState
             clientField={clientField}
             passwordField={passwordField}
+            STATES={STATES}
+            handleLoginState={handleLoginState}
+          />
+        )
+      case STATES.LOGINFIDO:
+        return (
+          <LoginFIDOState
+            clientField={clientField}
+            onClientChange={onClientChange}
+            rememberMeField={rememberMeField}
+            onRememberMeChange={onRememberMeChange}
             STATES={STATES}
             handleLoginState={handleLoginState}
           />

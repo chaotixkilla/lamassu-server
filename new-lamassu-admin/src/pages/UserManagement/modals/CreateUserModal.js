@@ -6,8 +6,8 @@ import * as Yup from 'yup'
 import Modal from 'src/components/Modal'
 import { Button } from 'src/components/buttons'
 import { RadioGroup } from 'src/components/inputs'
-import { TextInput } from 'src/components/inputs/base'
-import { H1, H2, H3, Info3, Mono } from 'src/components/typography'
+import { Checkbox, TextInput } from 'src/components/inputs/base'
+import { H1, H2, H3, Info3, Label2, Mono } from 'src/components/typography'
 import CopyToClipboard from 'src/pages/Transactions/CopyToClipboard'
 
 import styles from '../UserManagement.styles'
@@ -29,6 +29,7 @@ const CreateUserModal = ({ showModal, toggleModal }) => {
   const [usernameField, setUsernameField] = useState('')
   const [roleField, setRoleField] = useState('')
   const [createUserURL, setCreateUserURL] = useState(null)
+  const [fidoUser, setFidoUser] = useState(false)
   const [invalidUser, setInvalidUser] = useState(false)
 
   const radioOptions = [
@@ -53,9 +54,14 @@ const CreateUserModal = ({ showModal, toggleModal }) => {
     setRoleField(event.target.value)
   }
 
+  const handleFidoUser = () => {
+    setFidoUser(!fidoUser)
+  }
+
   const handleClose = () => {
     setUsernameField('')
     setRoleField('')
+    setFidoUser(false)
     setInvalidUser(false)
     setCreateUserURL(null)
     toggleModal()
@@ -117,7 +123,7 @@ const CreateUserModal = ({ showModal, toggleModal }) => {
         <Modal
           closeOnBackdropClick={true}
           width={600}
-          height={400}
+          height={475}
           handleClose={handleClose}
           open={true}>
           <H1 className={classes.modalTitle}>Create new user</H1>
@@ -142,6 +148,18 @@ const CreateUserModal = ({ showModal, toggleModal }) => {
             className={classes.radioGroup}
             labelClassName={classes.radioLabel}
           />
+          <H3 className={classes.modalLabel2}>Authentication</H3>
+          <div className={classes.fidoWrapper}>
+            <Checkbox
+              className={classes.checkbox}
+              id="fido"
+              onChange={handleFidoUser}
+              value={fidoUser}
+            />
+            <Label2 className={classes.checkboxLabel}>
+              Use Webauthn / FIDO
+            </Label2>
+          </div>
           <div className={classes.footer}>
             <Button onClick={validateNewUser}>Finish</Button>
           </div>
