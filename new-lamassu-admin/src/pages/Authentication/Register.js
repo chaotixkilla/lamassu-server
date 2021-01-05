@@ -26,6 +26,7 @@ const Register = () => {
   const [invalidPassword, setInvalidPassword] = useState(false)
   const [username, setUsername] = useState(null)
   const [role, setRole] = useState(null)
+  const [useFIDO, setFIDO] = useState(null)
   const [isLoading, setLoading] = useState(true)
   const [wasSuccessful, setSuccess] = useState(false)
 
@@ -50,6 +51,7 @@ const Register = () => {
             setSuccess(true)
             setUsername(res.data.username)
             setRole(res.data.role)
+            setFIDO(res.data.useFIDO)
           }
         }
       })
@@ -67,7 +69,8 @@ const Register = () => {
       data: {
         username: username,
         password: passwordField,
-        role: role
+        role: role,
+        useFIDO: useFIDO
       },
       withCredentials: true,
       headers: {

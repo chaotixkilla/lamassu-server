@@ -93,7 +93,8 @@ const CreateUserModal = ({ showModal, toggleModal }) => {
       url: `${url}/api/createuser`,
       data: {
         username: username,
-        role: roleField
+        role: roleField,
+        useFIDO: fidoUser
       },
       withCredentials: true,
       headers: {
