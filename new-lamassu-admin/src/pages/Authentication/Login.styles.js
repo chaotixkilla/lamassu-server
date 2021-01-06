@@ -67,7 +67,8 @@ const styles = {
     left: '50%',
     right: '50%',
     marginLeft: '-50vw',
-    marginRight: '-50vw'
+    marginRight: '-50vw',
+    minHeight: '100vh'
   },
   info: {
     fontFamily: fontSecondary,

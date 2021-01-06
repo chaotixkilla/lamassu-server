@@ -107,7 +107,6 @@ const Register = () => {
       direction="column"
       alignItems="center"
       justify="center"
-      style={{ minHeight: '100vh' }}
       className={classes.welcomeBackground}>
       <Grid>
         <div>
