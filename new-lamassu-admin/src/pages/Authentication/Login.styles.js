@@ -61,8 +61,6 @@ const styles = {
     background: 'url(/wizard-background.svg) no-repeat center center fixed',
     backgroundColor: backgroundColor,
     backgroundSize: 'cover',
-    // filter: 'blur(4px)',
-    // pointerEvents: 'none',
     height: '100vh',
     width: '100vw',
     position: 'relative',

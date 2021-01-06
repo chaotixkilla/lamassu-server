@@ -9,7 +9,6 @@ import {
 } from 'react-router-dom'
 
 import { AppContext } from 'src/App'
-// import AuthRegister from 'src/pages/AuthRegister'
 import Login from 'src/pages/Authentication/Login'
 import Register from 'src/pages/Authentication/Register'
 import Reset2FA from 'src/pages/Authentication/Reset2FA'

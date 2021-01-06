@@ -1,24 +1,19 @@
-/* eslint-disable prettier/prettier */
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { makeStyles, Box, Chip } from '@material-ui/core'
 import axios from 'axios'
 import gql from 'graphql-tag'
-// import moment from 'moment'
 import * as R from 'ramda'
 import React, { useState, useContext } from 'react'
-// import parser from 'ua-parser-js'
 
 import { AppContext } from 'src/App'
-import { Link /*, IconButton */ } from 'src/components/buttons'
+import { Link } from 'src/components/buttons'
 import { Switch } from 'src/components/inputs'
 import TitleSection from 'src/components/layout/TitleSection'
 import DataTable from 'src/components/tables/DataTable'
-// import { ReactComponent as DeleteIcon } from 'src/styling/icons/action/delete/enabled.svg'
 
 import styles from './UserManagement.styles'
 import ChangeRoleModal from './modals/ChangeRoleModal'
 import CreateUserModal from './modals/CreateUserModal'
-// import DeleteUserModal from './modals/DeleteUserModal'
 import EnableUserModal from './modals/EnableUserModal'
 import Input2FAModal from './modals/Input2FAModal'
 import Reset2FAModal from './modals/Reset2FAModal'
@@ -43,14 +38,6 @@ const GET_USERS = gql`
   }
 `
 
-/* const DELETE_USERS = gql`
-  mutation deleteUser($id: ID!) {
-    deleteUser(id: $id) {
-      id
-    }
-  }
-` */
-
 const CHANGE_USER_ROLE = gql`
   mutation changeUserRole($id: ID!, $newRole: String!) {
     changeUserRole(id: $id, newRole: $newRole) {
@@ -73,10 +60,6 @@ const Users = () => {
   const { userData } = useContext(AppContext)
 
   const { data: userResponse } = useQuery(GET_USERS)
-
-  /* const [deleteUser] = useMutation(DELETE_USERS, {
-    refetchQueries: () => ['users']
-  }) */
 
   const [changeUserRole] = useMutation(CHANGE_USER_ROLE, {
     refetchQueries: () => ['users']
@@ -102,21 +85,16 @@ const Users = () => {
   const toggleReset2FAModal = () => setShowReset2FAModal(!showReset2FAModal)
 
   const [showRoleModal, setShowRoleModal] = useState(false)
-  const toggleRoleModal = () =>
-    setShowRoleModal(!showRoleModal)
+  const toggleRoleModal = () => setShowRoleModal(!showRoleModal)
 
   const [showEnableUserModal, setShowEnableUserModal] = useState(false)
   const toggleEnableUserModal = () =>
     setShowEnableUserModal(!showEnableUserModal)
 
-  /* const [showDeleteUserModal, setShowDeleteUserModal] = useState(false)
-  const toggleDeleteUserModal = () =>
-    setShowDeleteUserModal(!showDeleteUserModal) */
-
   const [showInputConfirmModal, setShowInputConfirmModal] = useState(false)
   const toggleInputConfirmModal = () =>
     setShowInputConfirmModal(!showInputConfirmModal)
-  
+
   const [action, setAction] = useState(null)
 
   const requestNewPassword = userID => {
@@ -248,7 +226,7 @@ const Users = () => {
               className={classes.actionChip}
               onClick={() => {
                 setUserInfo(u)
-                if(u.role === 'superuser') {
+                if (u.role === 'superuser') {
                   setAction(() => requestNewPassword.bind(null, u.id))
                   toggleInputConfirmModal()
                 } else {
@@ -262,7 +240,7 @@ const Users = () => {
               className={classes.actionChip}
               onClick={() => {
                 setUserInfo(u)
-                if(u.role === 'superuser') {
+                if (u.role === 'superuser') {
                   setAction(() => requestNew2FA.bind(null, u.id))
                   toggleInputConfirmModal()
                 } else {
@@ -274,18 +252,6 @@ const Users = () => {
         )
       }
     },
-    /* {
-      header: 'Actions',
-      width: 535,
-      textAlign: 'left',
-      size: 'sm',
-      view: u => {
-        const ua = parser(u.last_accessed_from)
-        return u.last_accessed_from
-          ? `${ua.browser.name} ${ua.browser.version} on ${ua.os.name} ${ua.os.version}`
-          : `No Record`
-      }
-    }, */
     {
       header: 'Enabled',
       width: 100,
@@ -302,22 +268,7 @@ const Users = () => {
           value={u.enabled}
         />
       )
-    }/* ,
-    {
-      header: 'Delete',
-      width: 100,
-      textAlign: 'center',
-      size: 'sm',
-      view: u => (
-        <IconButton
-          onClick={() => {
-            setUserInfo(u)
-            toggleDeleteUserModal()
-          }}>
-          <DeleteIcon />
-        </IconButton>
-      )
-    } */
+    }
   ]
 
   return (
@@ -366,14 +317,6 @@ const Users = () => {
         inputConfirmToggle={toggleInputConfirmModal}
         setAction={setAction}
       />
-      {/* <DeleteUserModal
-        showModal={showDeleteUserModal}
-        toggleModal={toggleDeleteUserModal}
-        user={userInfo}
-        confirm={deleteUser}
-        inputConfirmToggle={toggleInputConfirmModal}
-        setAction={setAction}
-      /> */}
       <Input2FAModal
         showModal={showInputConfirmModal}
         toggleModal={toggleInputConfirmModal}
