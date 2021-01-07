@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { makeStyles, Box, Chip } from '@material-ui/core'
+import { startAttestation, startAssertion } from '@simplewebauthn/browser'
 import axios from 'axios'
 import gql from 'graphql-tag'
 import * as R from 'ramda'
@@ -155,6 +156,83 @@ const Users = () => {
       })
   }
 
+  const testFIDO = () => {
+    axios({
+      url: `${url}/api/generate-assertion-options`,
+      method: 'POST',
+      options: {
+        withCredentials: true
+      },
+      data: {
+        userID: userData.id
+      }
+    }).then((res, err) => {
+      if (res.status === 200) {
+        startAssertion(res.data).then(response => {
+          verifyAssertion(response)
+        })
+      }
+    })
+  }
+
+  const verifyAssertion = assResponse => {
+    console.log(assResponse)
+    axios({
+      url: `${url}/api/verify-assertion`,
+      method: 'POST',
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        userID: userData.id,
+        assertionRes: JSON.stringify(assResponse)
+      }
+    })
+      .then((res, err) => {
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const configureFIDO = () => {
+    axios({
+      url: `${url}/api/generate-attestation-options`,
+      method: 'POST',
+      options: {
+        withCredentials: true
+      },
+      data: {
+        userID: userData.id
+      }
+    }).then((res, err) => {
+      if (res.status === 200) {
+        startAttestation(res.data).then(response => {
+          verifyAttestation(response)
+        })
+      }
+    })
+  }
+
+  const verifyAttestation = attResponse => {
+    axios({
+      url: `${url}/api/verify-attestation`,
+      method: 'POST',
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        userID: userData.id,
+        attestationRes: JSON.stringify(attResponse)
+      }
+    }).then((res, err) => {
+      // do nothing
+    })
+  }
+
   const elements = [
     {
       header: 'Login',
@@ -280,6 +358,12 @@ const Users = () => {
         className={classes.tableWidth}
         display="flex"
         justifyContent="flex-end">
+        <Link color="primary" onClick={testFIDO}>
+          Test FIDO
+        </Link>
+        <Link color="primary" onClick={configureFIDO}>
+          Configure FIDO
+        </Link>
         <Link color="primary" onClick={toggleCreateUserModal}>
           Add new user
         </Link>

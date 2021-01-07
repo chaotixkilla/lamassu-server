@@ -1,6 +1,6 @@
 import { makeStyles, Grid } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
-import { startAttestation } from '@simplewebauthn/browser'
+// import { startAttestation } from '@simplewebauthn/browser'
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
@@ -27,7 +27,7 @@ const Register = () => {
   const [invalidPassword, setInvalidPassword] = useState(false)
   const [username, setUsername] = useState(null)
   const [role, setRole] = useState(null)
-  const [useFIDO, setFIDO] = useState(null)
+  // const [useFIDO, setFIDO] = useState(null)
   // const [credID, setCredID] = useState('')
   const [isLoading, setLoading] = useState(true)
   const [wasSuccessful, setSuccess] = useState(false)
@@ -53,7 +53,7 @@ const Register = () => {
             setSuccess(true)
             setUsername(res.data.username)
             setRole(res.data.role)
-            setFIDO(res.data.useFIDO)
+            // setFIDO(res.data.useFIDO)
           }
         }
       })
@@ -91,7 +91,7 @@ const Register = () => {
       })
   }
 
-  const verifyAttestation = attResponse => {
+  /* const verifyAttestation = attResponse => {
     console.log(attResponse)
     axios({
       url: `${url}/api/verify-attestation`,
@@ -107,10 +107,10 @@ const Register = () => {
     }).then((res, err) => {
       console.log(res.data)
     })
-  }
+  } */
 
   const handleRegister = () => {
-    if (useFIDO) {
+    /* if (useFIDO) {
       axios({
         url: `${url}/api/generate-attestation-options`,
         method: 'POST',
@@ -127,9 +127,9 @@ const Register = () => {
           })
         }
       })
-    } else {
-      postRegister()
-    }
+    } else { */
+    postRegister()
+    // }
   }
 
   const isValidPassword = () => {
