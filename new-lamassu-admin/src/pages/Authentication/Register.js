@@ -92,6 +92,7 @@ const Register = () => {
   }
 
   const verifyAttestation = attResponse => {
+    console.log(attResponse)
     axios({
       url: `${url}/api/verify-attestation`,
       method: 'POST',
