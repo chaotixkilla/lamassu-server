@@ -166,17 +166,26 @@ const Users = () => {
       data: {
         userID: userData.id
       }
-    }).then((res, err) => {
-      if (res.status === 200) {
-        startAssertion(res.data).then(response => {
-          verifyAssertion(response)
-        })
-      }
     })
+      .then((res, err) => {
+        if (res.status === 200) {
+          startAssertion(res.data)
+            .then(response => {
+              verifyAssertion(response)
+            })
+            .catch(err => {
+              console.log('startAssertion failed')
+              console.log(err)
+            })
+        }
+      })
+      .catch(err => {
+        console.log('something went wrong')
+        console.log(err)
+      })
   }
 
   const verifyAssertion = assResponse => {
-    console.log(assResponse)
     axios({
       url: `${url}/api/verify-assertion`,
       method: 'POST',
@@ -193,6 +202,7 @@ const Users = () => {
         console.log(res.data)
       })
       .catch(err => {
+        console.log('verifyAssertion failed')
         console.log(err)
       })
   }
@@ -207,13 +217,23 @@ const Users = () => {
       data: {
         userID: userData.id
       }
-    }).then((res, err) => {
-      if (res.status === 200) {
-        startAttestation(res.data).then(response => {
-          verifyAttestation(response)
-        })
-      }
     })
+      .then((res, err) => {
+        if (res.status === 200) {
+          startAttestation(res.data)
+            .then(response => {
+              verifyAttestation(response)
+            })
+            .catch(err => {
+              console.log('startAttestation failed')
+              console.log(err)
+            })
+        }
+      })
+      .catch(err => {
+        console.log('something went wrong')
+        console.log(err)
+      })
   }
 
   const verifyAttestation = attResponse => {
@@ -228,9 +248,14 @@ const Users = () => {
         userID: userData.id,
         attestationRes: JSON.stringify(attResponse)
       }
-    }).then((res, err) => {
-      // do nothing
     })
+      .then((res, err) => {
+        // do nothing
+      })
+      .catch(err => {
+        console.log('something went wrong')
+        console.log(err)
+      })
   }
 
   const elements = [
