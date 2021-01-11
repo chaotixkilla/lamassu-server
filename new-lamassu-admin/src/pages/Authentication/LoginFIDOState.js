@@ -1,7 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles'
+import { startAssertion } from '@simplewebauthn/browser'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 
+import { AppContext } from 'src/App'
 import { Button } from 'src/components/buttons'
 import { Checkbox, TextInput } from 'src/components/inputs/base'
 import { Label2, P } from 'src/components/typography'
@@ -22,6 +25,8 @@ const LoginFIDOState = ({
   handleLoginState
 }) => {
   const classes = useStyles()
+  const history = useHistory()
+  const { setUserData } = useContext(AppContext)
 
   const [invalidLogin, setInvalidLogin] = useState(false)
 
@@ -34,13 +39,12 @@ const LoginFIDOState = ({
     onRememberMeChange(!rememberMeField)
   }
 
-  const handleLogin = () => {
+  const handleAssertion = () => {
     axios({
       method: 'POST',
-      url: `${url}/api/login`,
+      url: `${url}/api/generate-assertion-options`,
       data: {
-        username: clientField,
-        rememberMe: rememberMeField
+        username: clientField
       },
       options: {
         withCredentials: true
@@ -53,17 +57,65 @@ const LoginFIDOState = ({
         if (err) return
         if (res) {
           const status = res.status
-          const message = res.data.message
-          if (status === 200 && message === 'INPUT2FA')
-            handleLoginState(STATES.INPUT_2FA)
-          if (status === 200 && message === 'SETUP2FA')
-            handleLoginState(STATES.SETUP_2FA)
+          if (status === 200) {
+            startAssertion(res.data)
+              .then(response => {
+                verifyAssertion(response)
+              })
+              .catch(err => {
+                console.log('startAssertion failed')
+                console.log(err)
+                setInvalidLogin(true)
+              })
+          }
         }
       })
       .catch(err => {
         if (err.response && err.response.data) {
           if (err.response.status === 403) setInvalidLogin(true)
         }
+      })
+  }
+
+  const verifyAssertion = assResponse => {
+    axios({
+      url: `${url}/api/verify-assertion`,
+      method: 'POST',
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        username: clientField,
+        rememberMe: rememberMeField,
+        assertionRes: JSON.stringify(assResponse)
+      }
+    })
+      .then((res, err) => {
+        const status = res.status
+        const verified = res.data.verified
+        if (status === 200 && verified) {
+          getUserData()
+          history.push('/')
+        }
+      })
+      .catch(err => {
+        console.log('verifyAssertion failed')
+        console.log(err)
+      })
+  }
+
+  const getUserData = () => {
+    axios({
+      method: 'GET',
+      url: `${url}/user-data`,
+      withCredentials: true
+    })
+      .then(res => {
+        if (res.status === 200) setUserData(res.data.user)
+      })
+      .catch(err => {
+        if (err.status === 403) setUserData(null)
       })
   }
 
@@ -91,9 +143,7 @@ const LoginFIDOState = ({
       </div>
       <div className={classes.footer}>
         {invalidLogin && (
-          <P className={classes.errorMessage}>
-            Invalid login/password combination.
-          </P>
+          <P className={classes.errorMessage}>Invalid hardware credential.</P>
         )}
         <Button
           onClick={() => {
@@ -104,7 +154,7 @@ const LoginFIDOState = ({
         </Button>
         <Button
           onClick={() => {
-            handleLogin()
+            handleAssertion()
           }}
           buttonClassName={classes.loginButton}>
           Login

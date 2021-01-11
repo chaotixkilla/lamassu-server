@@ -158,7 +158,7 @@ const Users = () => {
 
   const testFIDO = () => {
     axios({
-      url: `${url}/api/generate-assertion-options`,
+      url: `${url}/api/generate-assertion-options-test`,
       method: 'POST',
       options: {
         withCredentials: true
@@ -187,7 +187,7 @@ const Users = () => {
 
   const verifyAssertion = assResponse => {
     axios({
-      url: `${url}/api/verify-assertion`,
+      url: `${url}/api/verify-assertion-test`,
       method: 'POST',
       withCredentials: true,
       headers: {
