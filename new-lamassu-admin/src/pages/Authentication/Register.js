@@ -27,8 +27,6 @@ const Register = () => {
   const [invalidPassword, setInvalidPassword] = useState(false)
   const [username, setUsername] = useState(null)
   const [role, setRole] = useState(null)
-  // const [useFIDO, setFIDO] = useState(null)
-  // const [credID, setCredID] = useState('')
   const [isLoading, setLoading] = useState(true)
   const [wasSuccessful, setSuccess] = useState(false)
 
@@ -53,7 +51,6 @@ const Register = () => {
             setSuccess(true)
             setUsername(res.data.username)
             setRole(res.data.role)
-            // setFIDO(res.data.useFIDO)
           }
         }
       })
@@ -63,7 +60,7 @@ const Register = () => {
       })
   }
 
-  const postRegister = () => {
+  const handleRegister = () => {
     if (!isValidPassword()) return setInvalidPassword(true)
     axios({
       url: `${url}/api/register`,
@@ -72,7 +69,6 @@ const Register = () => {
         username: username,
         password: passwordField,
         role: role
-        // credID: credID
       },
       withCredentials: true,
       headers: {
@@ -89,47 +85,6 @@ const Register = () => {
         console.log(err)
         history.push('/')
       })
-  }
-
-  /* const verifyAttestation = attResponse => {
-    console.log(attResponse)
-    axios({
-      url: `${url}/api/verify-attestation`,
-      method: 'POST',
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: {
-        username: username,
-        attestationRes: JSON.stringify(attResponse)
-      }
-    }).then((res, err) => {
-      console.log(res.data)
-    })
-  } */
-
-  const handleRegister = () => {
-    /* if (useFIDO) {
-      axios({
-        url: `${url}/api/generate-attestation-options`,
-        method: 'POST',
-        options: {
-          withCredentials: true
-        },
-        data: {
-          username: username
-        }
-      }).then((res, err) => {
-        if (res.status === 200) {
-          startAttestation(res.data).then(response => {
-            verifyAttestation(response)
-          })
-        }
-      })
-    } else { */
-    postRegister()
-    // }
   }
 
   const isValidPassword = () => {
