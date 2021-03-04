@@ -39,7 +39,10 @@ const cashOutHeader = (
 const getView = (data, code, compare) => it => {
   if (!data) return ''
 
-  return R.compose(R.prop(code), R.find(R.propEq(compare ?? 'code', it)))(data)
+  // The following boolean should come undefined if it is rendering an unpaired machine
+  const hasValue = R.find(R.propEq(compare ?? 'code', it))(data)
+
+  return hasValue ? R.compose(R.prop(code), hasValue)(data) : 'Unpaired machine'
 }
 
 const displayCodeArray = data => it => {
@@ -63,6 +66,12 @@ const onCryptoChange = (prev, curr, setValue) => {
   setValue(curr)
 }
 
+const boldStyle = () => {
+  return {
+    fontWeight: 'bold'
+  }
+}
+
 const getOverridesFields = (getData, currency, auxElements) => {
   const machineData = [ALL_MACHINES].concat(getData(['machines']))
   const rawCryptos = getData(['cryptoCurrencies'])
@@ -80,7 +89,7 @@ const getOverridesFields = (getData, currency, auxElements) => {
       inputProps: {
         options: machineData,
         valueProp: 'deviceId',
-        getLabel: R.path(['name'])
+        labelProp: 'name'
       }
     },
     {
@@ -92,7 +101,7 @@ const getOverridesFields = (getData, currency, auxElements) => {
       inputProps: {
         options: cryptoData,
         valueProp: 'code',
-        getLabel: R.path(['display']),
+        labelProp: 'display',
         multiple: true,
         onChange: onCryptoChange
       }
@@ -105,6 +114,7 @@ const getOverridesFields = (getData, currency, auxElements) => {
       input: NumberInput,
       textAlign: 'right',
       suffix: '%',
+      textStyle: boldStyle,
       inputProps: {
         decimalPlaces: 3
       }
@@ -117,6 +127,7 @@ const getOverridesFields = (getData, currency, auxElements) => {
       input: NumberInput,
       textAlign: 'right',
       suffix: '%',
+      textStyle: boldStyle,
       inputProps: {
         decimalPlaces: 3
       }
@@ -129,6 +140,7 @@ const getOverridesFields = (getData, currency, auxElements) => {
       doubleHeader: 'Cash-in only',
       textAlign: 'right',
       suffix: currency,
+      textStyle: boldStyle,
       inputProps: {
         decimalPlaces: 2
       }
@@ -141,6 +153,7 @@ const getOverridesFields = (getData, currency, auxElements) => {
       doubleHeader: 'Cash-in only',
       textAlign: 'right',
       suffix: currency,
+      textStyle: boldStyle,
       inputProps: {
         decimalPlaces: 2
       }
@@ -155,8 +168,10 @@ const mainFields = currency => [
     display: 'Cash-in',
     width: 169,
     size: 'lg',
+    editingAlign: 'right',
     input: NumberInput,
     suffix: '%',
+    textStyle: boldStyle,
     inputProps: {
       decimalPlaces: 3
     }
@@ -167,8 +182,10 @@ const mainFields = currency => [
     display: 'Cash-out',
     width: 169,
     size: 'lg',
+    editingAlign: 'right',
     input: NumberInput,
     suffix: '%',
+    textStyle: boldStyle,
     inputProps: {
       decimalPlaces: 3
     }
@@ -180,8 +197,10 @@ const mainFields = currency => [
     size: 'lg',
     doubleHeader: 'Cash-in only',
     textAlign: 'center',
+    editingAlign: 'right',
     input: NumberInput,
     suffix: currency,
+    textStyle: boldStyle,
     inputProps: {
       decimalPlaces: 2
     }
@@ -193,8 +212,10 @@ const mainFields = currency => [
     size: 'lg',
     doubleHeader: 'Cash-in only',
     textAlign: 'center',
+    editingAlign: 'right',
     input: NumberInput,
     suffix: currency,
+    textStyle: boldStyle,
     inputProps: {
       decimalPlaces: 2
     }
@@ -450,7 +471,7 @@ const getListCommissionsFields = (getData, currency, defaults) => {
     {
       name: 'cryptoCurrencies',
       display: 'Crypto Currency',
-      width: 280,
+      width: 265,
       view: R.prop(0),
       size: 'sm',
       editable: false

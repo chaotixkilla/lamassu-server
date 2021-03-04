@@ -48,6 +48,7 @@ const Tooltip = memo(({ children, width, Icon = HelpIcon }) => {
     <ClickAwayListener onClickAway={handler.handleCloseHelpPopper}>
       <div>
         <button
+          type="button"
           className={handler.classes.transparentButton}
           onClick={handler.handleOpenHelpPopper}>
           <Icon />

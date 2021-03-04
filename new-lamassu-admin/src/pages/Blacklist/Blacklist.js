@@ -74,9 +74,14 @@ const Blacklist = () => {
     display: 'Bitcoin'
   })
   const [errorMsg, setErrorMsg] = useState(null)
+  const [deleteDialog, setDeleteDialog] = useState(false)
 
   const [deleteEntry] = useMutation(DELETE_ROW, {
-    onError: () => console.error('Error while deleting row'),
+    onError: ({ message }) => {
+      const errorMessage = message ?? 'Error while deleting row'
+      setErrorMsg(errorMessage)
+    },
+    onCompleted: () => setDeleteDialog(false),
     refetchQueries: () => ['getBlacklistData']
   })
 
@@ -134,11 +139,11 @@ const Blacklist = () => {
   return (
     <>
       <TitleSection title="Blacklisted addresses">
-        <div>
-          <Link onClick={() => setShowModal(true)}>
+        <Box display="flex" justifyContent="flex-end">
+          <Link color="primary" onClick={() => setShowModal(true)}>
             Blacklist new addresses
           </Link>
-        </div>
+        </Box>
       </TitleSection>
       <Grid container className={classes.grid}>
         <Sidebar
@@ -181,6 +186,10 @@ const Blacklist = () => {
             data={formattedData}
             selectedCoin={clickedItem}
             handleDeleteEntry={handleDeleteEntry}
+            errorMessage={errorMsg}
+            setErrorMessage={setErrorMsg}
+            deleteDialog={deleteDialog}
+            setDeleteDialog={setDeleteDialog}
           />
         </div>
       </Grid>
