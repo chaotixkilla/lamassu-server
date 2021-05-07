@@ -6,10 +6,13 @@
   "license": "Unlicense",
   "author": "Lamassu (https://lamassu.is)",
   "dependencies": {
+    "@simplewebauthn/browser": "^3.0.0",
+    "@simplewebauthn/server": "^3.0.0",
     "apollo-server-express": "^2.9.14",
     "argon2": "^0.27.2",
     "axios": "0.21.1",
     "base-x": "3.0.8",
+    "base64url": "^3.0.1",
     "bchaddrjs": "^0.3.0",
     "bignumber.js": "^4.1.0",
     "bip39": "^2.3.1",
