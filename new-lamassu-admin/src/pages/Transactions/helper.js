@@ -10,6 +10,7 @@ const getCashInStatus = it => {
   if (it.hasError) return 'Error'
   if (it.sendConfirmed) return 'Sent'
   if (it.expired) return 'Expired'
+  if (it.batched) return 'Batched'
   return 'Pending'
 }
 
