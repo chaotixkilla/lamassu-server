@@ -108,7 +108,6 @@ const LoginState = ({ state, dispatch, strategy }) => {
     GENERATE_ASSERTION,
     {
       onCompleted: ({ generateAssertionOptions: options }) => {
-        console.log(options)
         startAssertion(options)
           .then(res => {
             validateAssertion({
