@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import ATMWallet from 'src/pages/ATMWallet/ATMWallet'
 import Accounting from 'src/pages/Accounting/Accounting'
+import Analytics from 'src/pages/Analytics/Analytics'
 import Blacklist from 'src/pages/Blacklist'
 import Cashout from 'src/pages/Cashout'
 import Commissions from 'src/pages/Commissions'
@@ -81,6 +82,13 @@ const getPazuzRoutes = () => [
         component: ServerLogs
       }
     ]
+  },
+  {
+    key: 'analytics',
+    label: 'Analytics',
+    route: '/analytics',
+    allowedRoles: [ROLES.USER, ROLES.SUPERUSER],
+    component: Analytics
   },
   {
     key: 'settings',
